@@ -5,16 +5,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Ma Page Étudiante</title>
 
-    <!-- Carte Leaflet -->
+    <!-- Bibliothèque pour la carte -->
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
     <style>
-
-        /* STYLE GENERAL */
+        /* PARTIE 1 : DESIGN DU SITE */
 
         * {
             box-sizing: border-box;
@@ -22,412 +20,220 @@
 
         body {
             margin: 0;
-            font-family: Georgia, serif;
-            background-color: #faf7f2;
-            color: #392c30;
+            background-color: #F7F5F0;
+            color: #4B4842;
+            font-family: Arial, sans-serif;
         }
 
         h1, h2, h3 {
-            color: #653747;
+            color: #4B4842;
         }
 
         p {
             line-height: 1.7;
         }
 
-        a {
-            color: #813f53;
-        }
+        /* Menu à droite */
 
-        /* MENU A DROITE */
-
-        .menu {
+        nav {
             position: fixed;
             top: 0;
             right: 0;
             width: 230px;
             height: 100vh;
-            background-color: #653747;
-            padding: 35px 18px;
-            z-index: 1000;
-            color: white;
+            background-color: #E9E5DD;
+            padding: 35px 20px;
         }
 
-        .menu h2 {
-            color: white;
-            font-size: 22px;
-            text-align: center;
-            margin-bottom: 45px;
+        nav h2 {
+            font-size: 21px;
+            margin-bottom: 35px;
         }
 
-        .menu button {
+        nav button {
             display: block;
             width: 100%;
             padding: 15px 10px;
-            margin-bottom: 12px;
-            background: transparent;
+            margin-bottom: 10px;
             border: none;
-            border-bottom: 1px solid #987483;
-            color: white;
-            font-family: Georgia, serif;
-            font-size: 15px;
+            background: transparent;
+            color: #4B4842;
             text-align: left;
             cursor: pointer;
+            font-size: 15px;
         }
 
-        .menu button:hover,
-        .menu button.actif {
-            background-color: #885568;
-            border-radius: 7px;
+        nav button:hover,
+        nav button.actif {
+            background-color: #D8D4CB;
+            border-radius: 6px;
         }
 
-        /* CONTENU PRINCIPAL */
+        /* Contenu des onglets */
 
         main {
             margin-right: 230px;
             padding: 50px 7%;
-            min-height: 100vh;
         }
 
         .section {
             display: none;
-            animation: apparition 0.3s ease;
         }
 
         .section.active {
             display: block;
         }
 
-        @keyframes apparition {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .titre-section {
-            font-size: 34px;
+        .titre {
             text-align: center;
+            font-size: 32px;
             margin-bottom: 15px;
         }
 
-        .sous-titre {
+        .introduction {
             text-align: center;
-            color: #827177;
-            margin-bottom: 40px;
+            color: #77736B;
+            margin-bottom: 35px;
         }
 
-        /* PAGE D'ACCUEIL */
+        /* Page d'accueil */
 
         .accueil {
             text-align: center;
             padding-top: 100px;
         }
 
-        .petit-titre {
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: #987483;
-            font-size: 13px;
-        }
-
         .accueil h1 {
-            font-size: 64px;
-            margin: 25px 0;
+            font-family: Georgia, serif;
+            font-size: 56px;
             font-weight: normal;
         }
 
         .slogan {
-            font-size: 25px;
+            font-size: 23px;
+            color: #77736B;
             font-style: italic;
-            color: #813f53;
-        }
-
-        .ligne {
-            width: 90px;
-            height: 2px;
-            background-color: #b78d9b;
-            margin: 35px auto;
         }
 
         .presentation {
             max-width: 600px;
-            margin: auto;
-            font-size: 17px;
+            margin: 35px auto;
         }
 
         .bouton {
-            display: inline-block;
-            margin-top: 30px;
-            padding: 13px 25px;
-            background-color: #653747;
+            background-color: #77736B;
             color: white;
             border: none;
-            border-radius: 25px;
-            font-family: Georgia, serif;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .bouton:hover {
-            background-color: #885568;
-        }
-
-        /* CARTES DES LIBRAIRIES */
-
-        .grille {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-        }
-
-        .carte-librairie {
-            background-color: white;
-            padding: 25px;
-            border: 1px solid #eadfe1;
-            border-radius: 14px;
-            box-shadow: 0 3px 12px #e8dfe0;
-        }
-
-        .carte-librairie h3 {
-            font-size: 21px;
-            margin-top: 0;
-        }
-
-        .carte-librairie p {
-            font-size: 14px;
-        }
-
-        .etiquette {
-            display: inline-block;
-            background-color: #f2e5e9;
-            color: #813f53;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-        }
-
-        .reduction {
-            background-color: #faf0e7;
-            border-radius: 8px;
-            padding: 10px;
-        }
-
-        /* FILTRES */
-
-        .filtres {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .filtres button {
-            padding: 10px 15px;
-            margin: 5px;
-            background: white;
-            border: 1px solid #d8c3cb;
-            border-radius: 20px;
-            color: #653747;
+            border-radius: 6px;
+            padding: 13px 22px;
             cursor: pointer;
         }
 
-        .filtres button:hover,
-        .filtres button.selectionne {
-            background-color: #653747;
-            color: white;
-        }
-
-        /* CARTE INTERACTIVE */
+        /* PARTIE 2 : STYLE DE LA CARTE */
 
         #carte {
-            width: 100%;
             height: 550px;
-            border-radius: 15px;
-            border: 1px solid #e5dcd6;
-            z-index: 1;
+            width: 100%;
+            border: 1px solid #D8D4CB;
+            border-radius: 8px;
         }
 
         .point-librairie {
             width: 12px;
             height: 12px;
-            background-color: #813f53;
+            background-color: #77736B;
             border: 2px solid white;
             border-radius: 50%;
-            box-shadow: 0 1px 5px #777;
         }
 
         .popup-librairie {
-            font-family: Arial, sans-serif;
-            width: 240px;
+            max-width: 250px;
             line-height: 1.5;
         }
 
         .popup-librairie h3 {
-            color: #653747;
-            font-size: 17px;
+            margin-bottom: 8px;
         }
 
-        .popup-librairie p {
-            font-size: 12px;
-            margin: 8px 0;
-        }
-
-        .popup-librairie .bon-plan {
-            background-color: #faf0e7;
-            padding: 8px;
-            border-radius: 7px;
-        }
-
-        /* COUPS DE COEUR */
+        /* PARTIE 3 : STYLE DES LIVRES */
 
         .livre {
             display: flex;
-            align-items: center;
-            gap: 35px;
-            margin-bottom: 65px;
-            padding-bottom: 40px;
-            border-bottom: 1px solid #e7d9dc;
+            gap: 30px;
+            align-items: flex-start;
+            margin-bottom: 45px;
+            padding: 25px;
+            background-color: #E9E5DD;
+            border-radius: 8px;
         }
 
         .couverture {
-            width: 180px;
-            min-width: 180px;
-            height: 265px;
-            background: linear-gradient(140deg, #653747, #b78d9b);
-            color: white;
-            border-radius: 5px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 5px 7px 15px #d8c8ce;
-        }
-
-        .couverture h3 {
-            color: white;
-            font-size: 21px;
-        }
-
-        .couverture p {
-            color: #f5e6eb;
-            font-size: 13px;
+            width: 160px;
+            height: 235px;
+            object-fit: cover;
+            border-radius: 4px;
         }
 
         .avis {
-            background-color: #f7e9ed;
-            padding: 25px;
-            border-radius: 25px;
-            position: relative;
             flex: 1;
-        }
-
-        .avis::before {
-            content: "♥";
-            position: absolute;
-            top: -24px;
-            right: 25px;
-            color: #a85b73;
-            font-size: 42px;
         }
 
         .avis h3 {
             margin-top: 0;
         }
 
-        .avis p {
-            font-size: 14px;
+        .auteur {
+            color: #77736B;
+            font-style: italic;
         }
 
-        /* CONSEILS */
-
-        .message-attente {
-            text-align: center;
-            background-color: white;
-            border-radius: 15px;
-            padding: 60px 25px;
-            margin-top: 50px;
-        }
-
-        /* PIED DE PAGE */
-
-        footer {
-            margin-top: 80px;
-            text-align: center;
-            color: #99868d;
-            font-size: 12px;
-        }
-
-        /* TELEPHONE */
+        /* Adaptation aux petits écrans */
 
         @media (max-width: 800px) {
-
-            .menu {
+            nav {
                 position: relative;
                 width: 100%;
                 height: auto;
-                padding: 15px;
-            }
-
-            .menu h2 {
-                margin: 5px 0 15px;
-            }
-
-            .menu button {
-                text-align: center;
-                margin-bottom: 4px;
-                padding: 10px;
             }
 
             main {
                 margin-right: 0;
-                padding: 25px 5%;
+                padding: 25px;
             }
 
             .accueil {
-                padding-top: 50px;
+                padding-top: 40px;
             }
 
             .accueil h1 {
-                font-size: 42px;
-            }
-
-            .grille {
-                grid-template-columns: 1fr;
+                font-size: 38px;
             }
 
             .livre {
                 flex-direction: column;
             }
 
-            .couverture {
-                width: 180px;
-            }
-
             #carte {
                 height: 450px;
             }
         }
-
     </style>
 </head>
 
 <body>
 
-    <!-- MENU VERTICAL -->
+    <!-- MENU DU SITE -->
 
-    <nav class="menu">
+    <nav>
+        <h2>Ma Page Étudiante</h2>
 
-        <h2>Ma Page Étudiante ♡</h2>
-
-        <button class="actif" onclick="ouvrirSection('accueil', this)">
+        <button class="actif"
+                onclick="ouvrirSection('accueil', this)">
             Accueil
         </button>
 
         <button onclick="ouvrirSection('librairies', this)">
-            Nos librairies
-        </button>
-
-        <button onclick="ouvrirSection('map', this)">
-            Carte des librairies
+            Les librairies conçues pour vous
         </button>
 
         <button onclick="ouvrirSection('coups', this)">
@@ -437,138 +243,102 @@
         <button onclick="ouvrirSection('conseils', this)">
             Conseils pratiques
         </button>
-
     </nav>
-
 
     <main>
 
-        <!-- SECTION 1 : ACCUEIL -->
+        <!-- PARTIE 1 : PAGE D'ACCUEIL -->
 
         <section id="accueil" class="section active">
 
             <div class="accueil">
-
-                <p class="petit-titre">Le guide culturel des étudiants</p>
-
                 <h1>Ma Page Étudiante</h1>
 
                 <p class="slogan">
                     Plus de culture, moins de dépenses !
                 </p>
 
-                <div class="ligne"></div>
-
                 <p class="presentation">
-                    Bienvenue sur Ma Page Étudiante, votre petit guide
-                    pour découvrir la culture à Paris sans vous ruiner !
-                    <br><br>
-                    Retrouvez des librairies accessibles, des livres
-                    à petits prix, nos coups de cœur littéraires
-                    et des conseils pratiques pour profiter pleinement
-                    de la vie étudiante.
+                    Découvrez les librairies parisiennes
+                    accessibles aux étudiants, des livres
+                    à petits prix et nos recommandations
+                    littéraires.
                 </p>
 
                 <button class="bouton"
                         onclick="ouvrirSection('librairies')">
                     Découvrir les librairies
                 </button>
-
             </div>
 
         </section>
 
 
-        <!-- SECTION 2 : NOS LIBRAIRIES -->
+        <!-- PARTIE 2 : PAGE DES LIBRAIRIES -->
 
         <section id="librairies" class="section">
 
-            <h2 class="titre-section">Nos librairies</h2>
+            <h2 class="titre">
+                Les librairies conçues pour vous
+            </h2>
 
-            <p class="sous-titre">
-                Nos bonnes adresses pour lire à petits prix à Paris.
+            <p class="introduction">
+                Découvrez nos dix librairies parisiennes.
+                Cliquez sur un point de la carte pour
+                voir les informations et les bons plans.
             </p>
 
-            <div class="filtres">
-
-                <button class="selectionne"
-                        onclick="filtrer('tous', this)">
-                    Toutes
-                </button>
-
-                <button onclick="filtrer('occasion', this)">
-                    Occasion
-                </button>
-
-                <button onclick="filtrer('solidaire', this)">
-                    Solidaires
-                </button>
-
-                <button onclick="filtrer('generaliste', this)">
-                    Généralistes
-                </button>
-
-            </div>
-
-            <div id="liste-librairies" class="grille"></div>
-
-        </section>
-
-
-        <!-- SECTION 3 : CARTE -->
-
-        <section id="map" class="section">
-
-            <h2 class="titre-section">Carte des librairies</h2>
-
-            <p class="sous-titre">
-                Cliquez sur les petits points pour découvrir
-                les spécialités et les bons plans de chaque librairie.
-            </p>
-
+            <!-- La carte apparaîtra ici -->
             <div id="carte"></div>
 
+            <p>
+                <small>
+                    Les horaires et les offres sont
+                    à vérifier auprès des librairies.
+                </small>
+            </p>
+
         </section>
 
 
-        <!-- SECTION 4 : COUPS DE COEUR -->
+        <!-- PARTIE 3 : PAGE DES COUPS DE COEUR -->
 
         <section id="coups" class="section">
 
-            <h2 class="titre-section">Nos coups de cœur ♡</h2>
+            <h2 class="titre">Nos coups de cœur</h2>
 
-            <p class="sous-titre">
-                Des lectures que nous avons envie de partager avec vous.
+            <p class="introduction">
+                Cinq livres que nous avons envie
+                de partager avec vous.
             </p>
-
 
             <!-- LIVRE 1 -->
 
             <article class="livre">
 
-                <div class="couverture">
-                    <h3>Purgatoire des innocents</h3>
-                    <p>Karine Giebel</p>
-                </div>
+                <img class="couverture"
+                     src="images/purgatoire-des-innocents.jpg"
+                     alt="Couverture de Purgatoire des innocents">
 
                 <div class="avis">
-
-                    <h3>Purgatoire des innocents — Karine Giebel</h3>
+                    <h3>Purgatoire des innocents</h3>
+                    <p class="auteur">Karine Giebel</p>
 
                     <p><strong>Mais quelle claque !</strong></p>
 
                     <p>
-                        C'est typiquement le genre de roman qu'on commence
-                        pour quelques chapitres et qu'on finit par dévorer
-                        sans voir le temps passer.
+                        C'est typiquement le genre de roman qu'on
+                        commence pour quelques chapitres et qu'on
+                        finit par dévorer sans voir le temps passer.
                     </p>
 
                     <p>
-                        Karine Giebel nous embarque dans une histoire sombre,
-                        oppressante, qui ne laisse absolument aucun répit.
-                        On pense avoir compris, on espère, on doute,
-                        on tremble pour les personnages… et surtout,
-                        on ne sait jamais vraiment à quoi s'attendre.
+                        Karine Giebel nous embarque dans une histoire
+                        sombre, oppressante, qui ne laisse absolument
+                        aucun répit. On pense avoir compris, on espère,
+                        on doute, on tremble pour les personnages…
+                        et surtout, on ne sait jamais vraiment
+                        à quoi s'attendre.
                     </p>
 
                     <p>
@@ -585,8 +355,8 @@
                     </p>
 
                     <p>
-                        Une chose est sûre : Karine Giebel
-                        ne fait pas dans la demi-mesure !
+                        Une chose est sûre : Karine Giebel ne fait
+                        pas dans la demi-mesure !
                     </p>
 
                     <p>
@@ -594,7 +364,6 @@
                         impossible à lâcher. À découvrir…
                         si vous avez le cœur bien accroché !
                     </p>
-
                 </div>
 
             </article>
@@ -604,29 +373,26 @@
 
             <article class="livre">
 
-                <div class="couverture">
-                    <h3>La Cuisine étudiante</h3>
-                    <p>Marmiton</p>
-                </div>
+                <img class="couverture"
+                     src="images/la-cuisine-etudiante.jpg"
+                     alt="Couverture de La Cuisine étudiante">
 
                 <div class="avis">
-
-                    <h3>La Cuisine étudiante — Marmiton</h3>
+                    <h3>La Cuisine étudiante</h3>
+                    <p class="auteur">Marmiton</p>
 
                     <p>
-                        <strong>
-                            Être étudiant et bien manger sans exploser
-                            son budget, c'est possible !
-                        </strong>
+                        Être étudiant et bien manger sans exploser
+                        son budget, c'est possible !
                     </p>
 
                     <p>
                         Avec ses 60 recettes faciles, équilibrées
                         et économiques, ce livre donne plein d'idées
                         pour varier les repas sans passer des heures
-                        en cuisine. Des recettes simples, des ingrédients
-                        accessibles et surtout pas besoin d'être
-                        un grand chef pour se lancer !
+                        en cuisine. Des recettes simples, des
+                        ingrédients accessibles et surtout pas besoin
+                        d'être un grand chef pour se lancer !
                     </p>
 
                     <p>
@@ -639,7 +405,6 @@
                         qui veulent bien manger sans vider
                         leur compte en banque !
                     </p>
-
                 </div>
 
             </article>
@@ -649,20 +414,17 @@
 
             <article class="livre">
 
-                <div class="couverture">
-                    <h3>Le Mouvement</h3>
-                    <p>Douce Dibondo</p>
-                </div>
+                <img class="couverture"
+                     src="images/le-mouvement.jpg"
+                     alt="Couverture de Le Mouvement">
 
                 <div class="avis">
-
-                    <h3>Le Mouvement — Douce Dibondo</h3>
+                    <h3>Le Mouvement</h3>
+                    <p class="auteur">Douce Dibondo</p>
 
                     <p>
-                        <strong>
-                            Et si la colère devenait le début
-                            de quelque chose ?
-                        </strong>
+                        Et si la colère devenait le début
+                        de quelque chose ?
                     </p>
 
                     <p>
@@ -685,7 +447,6 @@
                         Une lecture forte, nécessaire et qui
                         ne laisse pas indifférent !
                     </p>
-
                 </div>
 
             </article>
@@ -695,34 +456,32 @@
 
             <article class="livre">
 
-                <div class="couverture">
-                    <h3>La Part absente</h3>
-                    <p>Rachida Brakni</p>
-                </div>
+                <img class="couverture"
+                     src="images/la-part-absente.jpg"
+                     alt="Couverture de La Part absente">
 
                 <div class="avis">
-
-                    <h3>La Part absente — Rachida Brakni</h3>
+                    <h3>La Part absente</h3>
+                    <p class="auteur">Rachida Brakni</p>
 
                     <p>
-                        <strong>
-                            Jusqu'où peut-on aller pour être accepté
-                            par les autres ?
-                        </strong>
+                        Jusqu'où peut-on aller pour être accepté
+                        par les autres ?
                     </p>
 
                     <p>
                         Karina a tout pour mener une vie parfaite.
-                        Mais derrière cette apparence se cache un secret :
-                        elle a changé son prénom pour tenter d'effacer
-                        une partie de ses origines.
+                        Mais derrière cette apparence se cache
+                        un secret : elle a changé son prénom
+                        pour tenter d'effacer une partie
+                        de ses origines.
                     </p>
 
                     <p>
-                        À travers son histoire, Rachida Brakni aborde
-                        l'identité, les racines, le regard des autres
-                        et cette envie parfois douloureuse de trouver
-                        sa place dans la société.
+                        À travers son histoire, Rachida Brakni
+                        aborde l'identité, les racines, le regard
+                        des autres et cette envie parfois douloureuse
+                        de trouver sa place dans la société.
                     </p>
 
                     <p>
@@ -736,7 +495,6 @@
                         de réfléchir à notre rapport aux origines
                         et à l'identité.
                     </p>
-
                 </div>
 
             </article>
@@ -746,27 +504,24 @@
 
             <article class="livre">
 
-                <div class="couverture">
-                    <h3>La Révolte de la reine</h3>
-                    <p>Morgane Moncomble</p>
-                </div>
+                <img class="couverture"
+                     src="images/la-revolte-de-la-reine.jpg"
+                     alt="Couverture de La Révolte de la reine">
 
                 <div class="avis">
-
-                    <h3>La Révolte de la reine — Morgane Moncomble</h3>
+                    <h3>La Révolte de la reine</h3>
+                    <p class="auteur">Morgane Moncomble</p>
 
                     <p>
-                        <strong>
-                            Une reine qui n'a pas vraiment l'intention
-                            de se laisser dicter sa conduite…
-                            voilà qui promet !
-                        </strong>
+                        Une reine qui n'a pas vraiment l'intention
+                        de se laisser dicter sa conduite…
+                        voilà qui promet !
                     </p>
 
                     <p>
                         Direction Versailles, en 1788.
-                        Acacia devient reine de France, mais compte bien
-                        faire les choses à sa manière.
+                        Acacia devient reine de France, mais compte
+                        bien faire les choses à sa manière.
                         Entre un mariage loin d'être idyllique,
                         les jeux de pouvoir à la cour et une Révolution
                         qui approche, rien ne va se passer comme prévu.
@@ -784,7 +539,6 @@
                         qui n'a pas sa langue dans sa poche :
                         le mélange parfait pour se laisser embarquer !
                     </p>
-
                 </div>
 
             </article>
@@ -792,62 +546,229 @@
         </section>
 
 
-        <!-- SECTION 5 : CONSEILS -->
+        <!-- PARTIE 4 : PAGE DES CONSEILS -->
 
         <section id="conseils" class="section">
 
-            <h2 class="titre-section">Conseils pratiques</h2>
+            <h2 class="titre">Conseils pratiques</h2>
 
-            <p class="sous-titre">
+            <p class="introduction">
                 Nos astuces pour profiter de la culture
                 avec un budget étudiant.
             </p>
 
-            <div class="message-attente">
-
-                <h3>Cette rubrique arrive bientôt ♡</h3>
-
-                <p>
-                    Nous préparons des conseils et des bons plans
-                    pour vous aider à découvrir Paris
-                    sans trop dépenser.
-                </p>
-
-            </div>
+            <p style="text-align: center;">
+                Cette rubrique arrive bientôt.
+            </p>
 
         </section>
-
-
-        <footer>
-            © 2026 Ma Page Étudiante —
-            Plus de culture, moins de dépenses !
-        </footer>
 
     </main>
 
 
-    <!-- BIBLIOTHEQUE LEAFLET -->
+    <!-- PARTIE 5 : JAVASCRIPT -->
 
+    <!-- Chargement de Leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 
     <script>
 
-        // ======================================
-        // 1. NAVIGATION ENTRE LES SECTIONS
-        // ======================================
+        // PARTIE CARTE : LES DONNEES
 
-        function ouvrirSection(id, bouton) {
+        var librairies = [
+            {
+                nom: "Librairie Delamain",
+                adresse: "155 Rue Saint-Honoré, 75001 Paris",
+                lat: 48.8625,
+                lng: 2.3355,
+                specialisation: "Littérature, nouveautés et livres rares",
+                bonsPlans: "5 % via Club Butterfly (à confirmer)",
+                horaires: "Lun-sam : 10h-20h ; dim : 13h-19h",
+                telephone: "01 42 61 48 78",
+                site: "https://www.delamain.fr/"
+            },
+            {
+                nom: "Librairie de Paris",
+                adresse: "7-11 Place de Clichy, 75017 Paris",
+                lat: 48.8837,
+                lng: 2.3276,
+                specialisation: "Littérature, essais, jeunesse et BD",
+                bonsPlans: "5 % via Club Butterfly (à confirmer)",
+                horaires: "Lun-sam : 10h-20h",
+                telephone: "01 45 22 47 81",
+                site: "https://www.librairie-de-paris.fr/"
+            },
+            {
+                nom: "Le Bibliovore",
+                adresse: "25 Rue de Vaucouleurs, 75011 Paris",
+                lat: 48.8685,
+                lng: 2.3785,
+                specialisation: "Romans et livres d'occasion",
+                bonsPlans: "3 € le livre ou 4 pour 10 €",
+                horaires: "Horaires variables selon les jours",
+                telephone: "06 66 72 53 21",
+                site: "https://www.lebibliovore.fr/"
+            },
+            {
+                nom: "Boulinier",
+                adresse: "18 Boulevard Saint-Michel, 75006 Paris",
+                lat: 48.8524,
+                lng: 2.3435,
+                specialisation: "Livres, BD, mangas, CD et DVD",
+                bonsPlans: "Livres à partir de 0,20 €",
+                horaires: "Lun-sam : 10h-20h ; dim : 13h30-19h30",
+                telephone: "01 43 25 86 02",
+                site: "https://www.boulinier.com/"
+            },
+            {
+                nom: "La Maison du Canal",
+                adresse: "27 Rue du Château d'Eau, 75010 Paris",
+                lat: 48.8719,
+                lng: 2.3600,
+                specialisation: "Livres d'occasion et dons",
+                bonsPlans: "Prix solidaires",
+                horaires: "Mar-ven : 12h-19h ; sam : 10h-19h",
+                telephone: "09 67 07 08 58",
+                site: "https://www.lamaisonducanal.fr/"
+            },
+            {
+                nom: "Emmaüs Campüs Césure",
+                adresse: "13 Rue Santeuil, 75005 Paris",
+                lat: 48.8394,
+                lng: 2.3533,
+                specialisation: "Livres et objets de seconde main",
+                bonsPlans: "Prix solidaires, offres étudiantes à vérifier",
+                horaires: "Mer-sam : 12h-18h30",
+                telephone: "Non communiqué",
+                site: "https://emmaus-defi.org/boutique-emmaus-cesure/"
+            },
+            {
+                nom: "Re-Read Paris Voltaire",
+                adresse: "119 Boulevard Voltaire, 75011 Paris",
+                lat: 48.8580,
+                lng: 2.3800,
+                specialisation: "Romans et livres d'occasion",
+                bonsPlans: "À partir de 4 €, offres à vérifier",
+                horaires: "Lun-sam : 10h-19h30",
+                telephone: "01 88 48 05 66",
+                site: "https://www.re-read.com/"
+            },
+            {
+                nom: "Book Off Châtelet",
+                adresse: "9 Rue Saint-Martin, 75004 Paris",
+                lat: 48.8585,
+                lng: 2.3486,
+                specialisation: "Mangas, BD et livres d'occasion",
+                bonsPlans: "Petits prix selon les arrivages",
+                horaires: "Lun-ven : 11h-19h30 ; sam : 10h-19h30",
+                telephone: "01 40 29 90 68",
+                site: "https://lingonbook.fr/pages/book-off-chatelet"
+            },
+            {
+                nom: "Bouquinerie Oxfam Daguerre",
+                adresse: "61 Rue Daguerre, 75014 Paris",
+                lat: 48.8341,
+                lng: 2.3265,
+                specialisation: "Littérature, jeunesse, BD et vinyles",
+                bonsPlans: "Livres à prix solidaires",
+                horaires: "Mar-sam : 12h-19h",
+                telephone: "01 42 79 83 10",
+                site: "https://www.oxfamfrance.org/magasins/bouquinerie-oxfam-paris-daguerre/"
+            },
+            {
+                nom: "Mona Lisait Gambetta",
+                adresse: "259 Rue des Pyrénées, 75020 Paris",
+                lat: 48.8680,
+                lng: 2.3985,
+                specialisation: "Livres neufs à prix réduits et occasion",
+                bonsPlans: "Déstockage et livres à prix réduits",
+                horaires: "À confirmer",
+                telephone: "09 87 52 17 04",
+                site: "https://monalisait.fr/"
+            }
+        ];
 
+
+        // PARTIE CARTE : AFFICHAGE
+
+        var carte = null;
+
+        function creerCarte() {
+
+            carte = L.map('carte').setView([48.8566, 2.3522], 12);
+
+            L.tileLayer(
+                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                {
+                    attribution: '&copy; OpenStreetMap',
+                    maxZoom: 19
+                }
+            ).addTo(carte);
+
+            var icone = L.divIcon({
+                className: '',
+                html: '<div class="point-librairie"></div>',
+                iconSize: [16, 16],
+                iconAnchor: [8, 8]
+            });
+
+            // Un marqueur pour chaque librairie
+
+            librairies.forEach(function(librairie) {
+
+                var informations = `
+                    <div class="popup-librairie">
+                        <h3>${librairie.nom}</h3>
+
+                        <p><b>Adresse :</b><br>
+                        ${librairie.adresse}</p>
+
+                        <p><b>Spécialisation :</b><br>
+                        ${librairie.specialisation}</p>
+
+                        <p><b>Bons plans :</b><br>
+                        ${librairie.bonsPlans}</p>
+
+                        <p><b>Horaires :</b><br>
+                        ${librairie.horaires}</p>
+
+                        <p><b>Téléphone :</b><br>
+                        ${librairie.telephone}</p>
+
+                        <a href="${librairie.site}"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            Site de la librairie
+                        </a>
+                    </div>
+                `;
+
+                L.marker([librairie.lat, librairie.lng], {
+                    icon: icone
+                })
+                .addTo(carte)
+                .bindPopup(informations);
+
+            });
+        }
+
+
+        // PARTIE 6 : CHANGER D'ONGLET
+
+        function ouvrirSection(nom, bouton) {
+
+            // Masquer toutes les sections
             var sections = document.querySelectorAll('.section');
 
             sections.forEach(function(section) {
                 section.classList.remove('active');
             });
 
-            document.getElementById(id).classList.add('active');
+            // Afficher la section choisie
+            document.getElementById(nom).classList.add('active');
 
-            var boutons = document.querySelectorAll('.menu button');
+            // Mettre à jour le menu
+            var boutons = document.querySelectorAll('nav button');
 
             boutons.forEach(function(element) {
                 element.classList.remove('actif');
@@ -856,347 +777,35 @@
             if (bouton) {
                 bouton.classList.add('actif');
             } else {
-                var correspondance = {
+                var ordre = {
                     accueil: 0,
                     librairies: 1,
-                    map: 2,
-                    coups: 3,
-                    conseils: 4
+                    coups: 2,
+                    conseils: 3
                 };
 
-                boutons[correspondance[id]].classList.add('actif');
+                boutons[ordre[nom]].classList.add('actif');
+            }
+
+            // Afficher correctement la carte
+            if (nom === 'librairies') {
+
+                if (carte === null) {
+                    creerCarte();
+                }
+
+                setTimeout(function() {
+                    carte.invalidateSize();
+                }, 100);
             }
 
             window.scrollTo(0, 0);
-
-            // Redimensionner la carte quand elle devient visible
-            if (id === 'map') {
-                setTimeout(function() {
-                    carte.invalidateSize();
-                }, 150);
-            }
         }
-
-
-        // ======================================
-        // 2. DONNEES DES 10 LIBRAIRIES
-        // ======================================
-
-        var librairies = [
-
-            {
-                nom: "Librairie Delamain",
-                adresse: "155 Rue Saint-Honoré, 75001 Paris",
-                latitude: 48.8625,
-                longitude: 2.3355,
-                type: "generaliste",
-                categorie: "Librairie généraliste",
-                specialisation: "Littérature française, nouveautés, livres anciens et éditions rares.",
-                bonsPlans: "Réduction de 5 % via Club Butterfly (à confirmer).",
-                horaires: "Lun–sam : 10h–20h ; dim : 13h–19h.",
-                telephone: "01 42 61 48 78",
-                site: "https://www.delamain.fr/"
-            },
-
-            {
-                nom: "Librairie de Paris",
-                adresse: "7-11 Place de Clichy, 75017 Paris",
-                latitude: 48.8837,
-                longitude: 2.3276,
-                type: "generaliste",
-                categorie: "Librairie généraliste",
-                specialisation: "Littérature, sciences humaines, essais, jeunesse, BD et mangas.",
-                bonsPlans: "Réduction de 5 % via Club Butterfly (à confirmer).",
-                horaires: "Lun–sam : 10h–20h ; dim : fermé.",
-                telephone: "01 45 22 47 81",
-                site: "https://www.librairie-de-paris.fr/"
-            },
-
-            {
-                nom: "Le Bibliovore Paris 11",
-                adresse: "25 Rue de Vaucouleurs, 75011 Paris",
-                latitude: 48.8685,
-                longitude: 2.3785,
-                type: "occasion",
-                categorie: "Livres d'occasion",
-                specialisation: "Romans, littérature contemporaine, classiques et livres d'occasion.",
-                bonsPlans: "3 € le livre ou 10 € les 4.",
-                horaires: "Mar et jeu : 14h30–19h30 ; mer et ven : 10h–13h et 14h30–19h30 ; sam : 10h–19h30 ; dim : 14h–18h ; lun : fermé.",
-                telephone: "06 66 72 53 21",
-                site: "https://www.lebibliovore.fr/"
-            },
-
-            {
-                nom: "Boulinier",
-                adresse: "18 Boulevard Saint-Michel, 75006 Paris",
-                latitude: 48.8524,
-                longitude: 2.3435,
-                type: "occasion",
-                categorie: "Livres d'occasion",
-                specialisation: "Livres d'occasion, BD, mangas, CD, DVD et vinyles.",
-                bonsPlans: "Livres à partir de 0,20 €.",
-                horaires: "Lun–sam : 10h–20h ; dim : 13h30–19h30.",
-                telephone: "01 43 25 86 02",
-                site: "https://www.boulinier.com/"
-            },
-
-            {
-                nom: "La Maison du Canal",
-                adresse: "27 Rue du Château d'Eau, 75010 Paris",
-                latitude: 48.8719,
-                longitude: 2.3600,
-                type: "solidaire",
-                categorie: "Librairie solidaire",
-                specialisation: "Livres d'occasion issus de dons, littérature et ouvrages variés.",
-                bonsPlans: "Prix solidaires et livres parfois gratuits.",
-                horaires: "Mar–ven : 12h–19h ; sam : 10h–19h ; dim–lun : fermé.",
-                telephone: "09 67 07 08 58",
-                site: "https://www.lamaisonducanal.fr/"
-            },
-
-            {
-                nom: "Emmaüs Campüs Césure",
-                adresse: "13 Rue Santeuil, 75005 Paris",
-                latitude: 48.8394,
-                longitude: 2.3533,
-                type: "solidaire",
-                categorie: "Boutique solidaire",
-                specialisation: "Livres d'occasion, vêtements et objets de seconde main.",
-                bonsPlans: "Promotions pour les étudiants et les moins de 30 ans (conditions à vérifier).",
-                horaires: "Mer–sam : 12h–18h30.",
-                telephone: "Non communiqué",
-                site: "https://emmaus-defi.org/boutique-emmaus-cesure/"
-            },
-
-            {
-                nom: "Re-Read Paris Voltaire",
-                adresse: "119 Boulevard Voltaire, 75011 Paris",
-                latitude: 48.8580,
-                longitude: 2.3800,
-                type: "occasion",
-                categorie: "Livres d'occasion",
-                specialisation: "Romans, classiques, livres en langues étrangères et ouvrages d'occasion.",
-                bonsPlans: "Livres à partir de 4 € ; tarifs dégressifs pour plusieurs livres (à vérifier).",
-                horaires: "Lun–sam : 10h–19h30 ; dim : fermé.",
-                telephone: "01 88 48 05 66",
-                site: "https://www.re-read.com/"
-            },
-
-            {
-                nom: "Book Off Châtelet",
-                adresse: "9 Rue Saint-Martin, 75004 Paris",
-                latitude: 48.8585,
-                longitude: 2.3486,
-                type: "occasion",
-                categorie: "Livres et mangas d'occasion",
-                specialisation: "Mangas, BD, romans, livres en langues étrangères, CD et DVD.",
-                bonsPlans: "Livres et mangas à petits prix, promotions selon les arrivages.",
-                horaires: "Lun–ven : 11h–19h30 ; sam : 10h–19h30 ; dim : 12h–19h30.",
-                telephone: "01 40 29 90 68",
-                site: "https://lingonbook.fr/pages/book-off-chatelet"
-            },
-
-            {
-                nom: "Bouquinerie Oxfam Daguerre",
-                adresse: "61 Rue Daguerre, 75014 Paris",
-                latitude: 48.8341,
-                longitude: 2.3265,
-                type: "solidaire",
-                categorie: "Librairie solidaire",
-                specialisation: "Littérature étrangère, sciences humaines, livres d'art, jeunesse, BD et vinyles.",
-                bonsPlans: "Livres d'occasion à prix solidaires.",
-                horaires: "Mar–sam : 12h–19h ; dim–lun : fermé.",
-                telephone: "01 42 79 83 10",
-                site: "https://www.oxfamfrance.org/magasins/bouquinerie-oxfam-paris-daguerre/"
-            },
-
-            {
-                nom: "Mona Lisait Gambetta",
-                adresse: "259 Rue des Pyrénées, 75020 Paris",
-                latitude: 48.8680,
-                longitude: 2.3985,
-                type: "occasion",
-                categorie: "Livres à prix réduits",
-                specialisation: "Livres neufs à prix réduits, livres d'occasion, ouvrages illustrés et littérature générale.",
-                bonsPlans: "Livres à prix réduits et déstockage.",
-                horaires: "À confirmer.",
-                telephone: "09 87 52 17 04",
-                site: "https://monalisait.fr/"
-            }
-
-        ];
-
-
-        // ======================================
-        // 3. AFFICHER LES LIBRAIRIES
-        // ======================================
-
-        var liste = document.getElementById('liste-librairies');
-
-        function afficherLibrairies(type) {
-
-            liste.innerHTML = "";
-
-            librairies.forEach(function(librairie) {
-
-                if (type === 'tous' || librairie.type === type) {
-
-                    var article = document.createElement('article');
-
-                    article.className = 'carte-librairie';
-
-                    article.innerHTML = `
-                        <h3>${librairie.nom}</h3>
-
-                        <span class="etiquette">
-                            ${librairie.categorie}
-                        </span>
-
-                        <p>
-                            <strong>Adresse :</strong>
-                            ${librairie.adresse}
-                        </p>
-
-                        <p>
-                            <strong>Spécialisation :</strong>
-                            ${librairie.specialisation}
-                        </p>
-
-                        <p class="reduction">
-                            <strong>Bons plans :</strong>
-                            ${librairie.bonsPlans}
-                        </p>
-
-                        <p>
-                            <strong>Horaires :</strong>
-                            ${librairie.horaires}
-                        </p>
-
-                        <p>
-                            <strong>Téléphone :</strong>
-                            ${librairie.telephone}
-                        </p>
-
-                        <a href="${librairie.site}"
-                           target="_blank"
-                           rel="noopener noreferrer">
-                            Site officiel
-                        </a>
-                    `;
-
-                    liste.appendChild(article);
-                }
-
-            });
-        }
-
-        afficherLibrairies('tous');
-
-
-        // ======================================
-        // 4. FILTRER LES LIBRAIRIES
-        // ======================================
-
-        function filtrer(type, bouton) {
-
-            afficherLibrairies(type);
-
-            var boutons = document.querySelectorAll('.filtres button');
-
-            boutons.forEach(function(element) {
-                element.classList.remove('selectionne');
-            });
-
-            bouton.classList.add('selectionne');
-        }
-
-
-        // ======================================
-        // 5. CARTE INTERACTIVE LEAFLET
-        // ======================================
-
-        var carte = L.map('carte').setView([48.8566, 2.3522], 12);
-
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors',
-            maxZoom: 19
-        }).addTo(carte);
-
-
-        // Petits points bordeaux
-
-        var iconeLibrairie = L.divIcon({
-            className: '',
-            html: '<div class="point-librairie"></div>',
-            iconSize: [16, 16],
-            iconAnchor: [8, 8]
-        });
-
-
-        // Ajouter les 10 points
-
-        librairies.forEach(function(librairie) {
-
-            var contenu = `
-                <div class="popup-librairie">
-
-                    <h3>${librairie.nom}</h3>
-
-                    <span class="etiquette">
-                        ${librairie.categorie}
-                    </span>
-
-                    <p>
-                        <strong>Adresse :</strong><br>
-                        ${librairie.adresse}
-                    </p>
-
-                    <p>
-                        <strong>Spécialisation :</strong><br>
-                        ${librairie.specialisation}
-                    </p>
-
-                    <p class="bon-plan">
-                        <strong>Bons plans :</strong><br>
-                        ${librairie.bonsPlans}
-                    </p>
-
-                    <p>
-                        <strong>Horaires :</strong><br>
-                        ${librairie.horaires}
-                    </p>
-
-                    <p>
-                        <strong>Téléphone :</strong><br>
-                        ${librairie.telephone}
-                    </p>
-
-                    <p>
-                        <a href="${librairie.site}"
-                           target="_blank"
-                           rel="noopener noreferrer">
-                            Visiter le site officiel
-                        </a>
-                    </p>
-
-                </div>
-            `;
-
-            L.marker(
-                [librairie.latitude, librairie.longitude],
-                {icon: iconeLibrairie}
-            )
-            .addTo(carte)
-            .bindPopup(contenu, {
-                maxWidth: 280,
-                maxHeight: 350
-            });
-
-        });
 
     </script>
 
 </body>
 </html>
+
 
 
