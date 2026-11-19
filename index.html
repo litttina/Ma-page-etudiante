@@ -1,373 +1,16 @@
-
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Carte des librairies à Paris</title>
-
-    <!-- Bibliothèque Leaflet -->
-    <link rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #faf7f2;
-            margin: 0;
-            padding: 30px;
-        }
-
-        h2 {
-            text-align: center;
-            color: #562c38;
-            margin-bottom: 10px;
-        }
-
-        .introduction {
-            text-align: center;
-            color: #666;
-            margin-bottom: 25px;
-        }
-
-        /* Carte */
-        #carte {
-            width: 100%;
-            height: 520px;
-            border-radius: 15px;
-            border: 1px solid #e5dcd6;
-            z-index: 1;
-        }
-
-        /* Petits points sur la carte */
-        .point-librairie {
-            background-color: #813f53;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            border: 2px solid white;
-            box-shadow: 0 1px 5px #777;
-        }
-
-        /* Fenêtre d'information */
-        .popup-librairie {
-            font-family: Arial, sans-serif;
-            width: 240px;
-            max-width: 100%;
-            line-height: 1.5;
-        }
-
-        .popup-librairie h3 {
-            color: #562c38;
-            font-size: 17px;
-            margin: 0 0 8px;
-        }
-
-        .popup-librairie p {
-            font-size: 12px;
-            margin: 7px 0;
-        }
-
-        .popup-librairie strong {
-            color: #562c38;
-        }
-
-        .popup-librairie a {
-            color: #813f53;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .popup-librairie a:hover {
-            text-decoration: underline;
-        }
-
-        .categorie {
-            display: inline-block;
-            background-color: #f3e7e9;
-            color: #813f53;
-            padding: 4px 9px;
-            border-radius: 12px;
-            font-size: 11px;
-            margin-bottom: 8px;
-        }
-
-        .bon-plan {
-            background-color: #faf1e8;
-            padding: 8px;
-            border-radius: 7px;
-        }
-
-        @media (max-width: 600px) {
-            body {
-                padding: 15px;
-            }
-
-            #carte {
-                height: 430px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-    <h2>Les librairies à Paris</h2>
-
-    <p class="introduction">
-        Découvrez nos librairies et leurs bons plans.
-        Cliquez sur un point pour en savoir plus !
-    </p>
-
-    <!-- Emplacement de la carte -->
-    <div id="carte"></div>
-
-    <!-- JavaScript Leaflet -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <script>
-
-        // 1. Création de la carte centrée sur Paris
-
-        var carte = L.map('carte').setView([48.8566, 2.3522], 12);
-
-        // 2. Fond de carte OpenStreetMap
-
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors',
-            maxZoom: 19
-        }).addTo(carte);
-
-
-        // 3. Liste de nos 10 librairies
-
-        var librairies = [
-
-            {
-                nom: "Librairie Delamain",
-                adresse: "155 Rue Saint-Honoré, 75001 Paris",
-                latitude: 48.8625,
-                longitude: 2.3355,
-                categorie: "Librairie généraliste",
-                specialisation: "Littérature française, nouveautés, livres anciens et éditions rares.",
-                bonsPlans: "Réduction de 5 % via Club Butterfly.",
-                horaires: "Lundi–samedi : 10h–20h ; dimanche : 13h–19h.",
-                telephone: "01 42 61 48 78",
-                site: "https://www.delamain.fr/"
-            },
-
-            {
-                nom: "Librairie de Paris",
-                adresse: "7-11 Place de Clichy, 75017 Paris",
-                latitude: 48.8837,
-                longitude: 2.3276,
-                categorie: "Librairie généraliste",
-                specialisation: "Littérature, sciences humaines, essais, jeunesse, BD et mangas.",
-                bonsPlans: "Réduction de 5 % via Club Butterfly.",
-                horaires: "Lundi–samedi : 10h–20h.",
-                telephone: "01 45 22 47 81",
-                site: "https://www.librairie-de-paris.fr/"
-            },
-
-            {
-                nom: "Le Bibliovore Paris 11",
-                adresse: "25 Rue de Vaucouleurs, 75011 Paris",
-                latitude: 48.8685,
-                longitude: 2.3785,
-                categorie: "Livres d'occasion",
-                specialisation: "Romans, littérature contemporaine, classiques et livres d'occasion.",
-                bonsPlans: "3 € le livre ou 10 € les 4.",
-                horaires: "Mardi et jeudi : 14h30–19h30 ; mercredi et vendredi : 10h–13h et 14h30–19h30 ; samedi : 10h–19h30 ; dimanche : 14h–18h.",
-                telephone: "06 66 72 53 21",
-                site: "https://www.lebibliovore.fr/"
-            },
-
-            {
-                nom: "Boulinier",
-                adresse: "18 Boulevard Saint-Michel, 75006 Paris",
-                latitude: 48.8524,
-                longitude: 2.3435,
-                categorie: "Livres d'occasion",
-                specialisation: "Livres d'occasion, BD, mangas, CD, DVD et vinyles.",
-                bonsPlans: "Livres à partir de 0,20 €.",
-                horaires: "Lundi–samedi : 10h–20h ; dimanche : 13h30–19h30.",
-                telephone: "01 43 25 86 02",
-                site: "https://www.boulinier.com/"
-            },
-
-            {
-                nom: "La Maison du Canal",
-                adresse: "27 Rue du Château d'Eau, 75010 Paris",
-                latitude: 48.8719,
-                longitude: 2.3600,
-                categorie: "Librairie solidaire",
-                specialisation: "Livres d'occasion, littérature et ouvrages variés.",
-                bonsPlans: "Prix solidaires.",
-                horaires: "Mardi–vendredi : 12h–19h ; sam : 10h–19h.",
-                telephone: "09 67 07 08 58",
-                site: "https://www.lamaisonducanal.fr/"
-            },
-
-            {
-                nom: "Emmaüs Campüs Césure",
-                adresse: "13 Rue Santeuil, 75005 Paris",
-                latitude: 48.8394,
-                longitude: 2.3533,
-                categorie: "Boutique solidaire",
-                specialisation: "Livres d'occasion, vêtements et objets de seconde main.",
-                bonsPlans: "Promotions pour les étudiants et les moins de 30 ans.",
-                horaires: "Mercredi–samedi : 12h–18h30.",
-                telephone: "Non communiqué",
-                site: "https://emmaus-defi.org/boutique-emmaus-cesure/"
-            },
-
-            {
-                nom: "Re-Read Paris Voltaire",
-                adresse: "119 Boulevard Voltaire, 75011 Paris",
-                latitude: 48.8580,
-                longitude: 2.3800,
-                categorie: "Livres d'occasion",
-                specialisation: "Romans, classiques, livres en langues étrangères et ouvrages d'occasion.",
-                bonsPlans: "Livres à partir de 4 € ; tarifs dégressifs pour plusieurs livres.",
-                horaires: "Lundi–samedi : 10h–19h30.",
-                telephone: "01 88 48 05 66",
-                site: "https://www.re-read.com/"
-            },
-
-            {
-                nom: "Book Off Châtelet",
-                adresse: "9 Rue Saint-Martin, 75004 Paris",
-                latitude: 48.8585,
-                longitude: 2.3486,
-                categorie: "Livres et mangas d'occasion",
-                specialisation: "Mangas, BD, romans, livres en langues étrangères, CD et DVD.",
-                bonsPlans: "Livres et mangas à petits prix, promotions selon les arrivages.",
-                horaires: "Lundi–vendredi : 11h–19h30 ; samedi : 10h–19h30 ; dimanche : 12h–19h30.",
-                telephone: "01 40 29 90 68",
-                site: "https://lingonbook.fr/pages/book-off-chatelet"
-            },
-
-            {
-                nom: "Bouquinerie Oxfam Daguerre",
-                adresse: "61 Rue Daguerre, 75014 Paris",
-                latitude: 48.8341,
-                longitude: 2.3265,
-                categorie: "Librairie solidaire",
-                specialisation: "Littérature étrangère, sciences humaines, livres d'art, jeunesse, BD et vinyles.",
-                bonsPlans: "Livres d'occasion à prix solidaires.",
-                horaires: "Mardi–samedi : 12h–19h ; dimanche–lundi : fermé.",
-                telephone: "01 42 79 83 10",
-                site: "https://www.oxfamfrance.org/magasins/bouquinerie-oxfam-paris-daguerre/"
-            },
-
-            {
-                nom: "Mona Lisait Gambetta",
-                adresse: "259 Rue des Pyrénées, 75020 Paris",
-                latitude: 48.8680,
-                longitude: 2.3985,
-                categorie: "Livres à prix réduits",
-                specialisation: "Livres neufs à prix réduits, livres d'occasion, ouvrages illustrés et littérature générale.",
-                bonsPlans: "Livres à prix réduits et déstockage.",
-                horaires: "Mardi-samedi : 9h-20h.",
-                telephone: "09 87 52 17 04",
-                site: "https://monalisait.fr/"
-            }
-
-        ];
-
-
-        // 4. Création de nos petits points
-
-        var iconeLibrairie = L.divIcon({
-            className: '',
-            html: '<div class="point-librairie"></div>',
-            iconSize: [16, 16],
-            iconAnchor: [8, 8]
-        });
-
-
-        // 5. Ajouter chaque librairie sur la carte
-
-        librairies.forEach(function(librairie) {
-
-            // Contenu de la fenêtre
-            var contenu = `
-                <div class="popup-librairie">
-
-                    <h3>${librairie.nom}</h3>
-
-                    <span class="categorie">
-                        ${librairie.categorie}
-                    </span>
-
-                    <p>
-                        <strong>Adresse :</strong><br>
-                        ${librairie.adresse}
-                    </p>
-
-                    <p>
-                        <strong>Spécialisation :</strong><br>
-                        ${librairie.specialisation}
-                    </p>
-
-                    <p class="bon-plan">
-                        <strong>Bons plans :</strong><br>
-                        ${librairie.bonsPlans}
-                    </p>
-
-                    <p>
-                        <strong>Horaires :</strong><br>
-                        ${librairie.horaires}
-                    </p>
-
-                    <p>
-                        <strong>Téléphone :</strong><br>
-                        ${librairie.telephone}
-                    </p>
-
-                    <p>
-                        <a href="${librairie.site}"
-                           target="_blank"
-                           rel="noopener noreferrer">
-                            Visiter le site officiel
-                        </a>
-                    </p>
-
-                </div>
-            `;
-
-            // Créer le point
-            L.marker(
-                [librairie.latitude, librairie.longitude],
-                {icon: iconeLibrairie}
-            )
-            .addTo(carte)
-            .bindPopup(contenu, {
-                maxWidth: 280,
-                maxHeight: 350
-            });
-
-        });
-
-    </script>
-
-</body>
-</html>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ma Page Étudiante</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="page">
 <main>
-<section id="accueil" class="accueil">
+<section id="accueil" class="accueil onglet actif">
 <p class="petit-titre">Bienvenue sur</p>
 <h1>Ma Page Étudiante</h1>
 <h2>Plus de culture, moins de dépenses !</h2>
@@ -376,19 +19,22 @@
 </section>
 
 
-<section id="librairies" class="section-simple">
+<section id="librairies" class="section-simple onglet">
 <h2>Nos librairies</h2>
-<p>Retrouvez bientôt notre sélection de librairies parisiennes et leurs bons plans.</p>
+<p>Découvrez nos dix adresses et leurs bons plans. Cliquez sur « Carte » pour les situer dans Paris.</p>
+<div id="liste-librairies" class="liste-librairies"></div>
 </section>
 
 
-<section id="carte" class="section-simple">
+<section id="carte" class="section-simple onglet">
 <h2>La carte des librairies</h2>
-<p>Notre carte interactive sera intégrée ici dans la prochaine étape.</p>
+<p>Cliquez sur un petit point pour découvrir la spécialisation, les prix et les horaires de chaque librairie.</p>
+<div id="carte-librairies" aria-label="Carte interactive des librairies parisiennes"></div>
+<p class="note">Les coordonnées sont indicatives. Horaires et offres à vérifier avant publication.</p>
 </section>
 
 
-<section id="coups-de-coeur" class="coups-de-coeur">
+<section id="coups-de-coeur" class="coups-de-coeur onglet">
 <h2>♡ Nos coups de cœur</h2>
 <p class="sous-titre">Cinq lectures que nous avons envie de partager avec vous.</p>
 
@@ -468,7 +114,7 @@
 </section>
 
 
-<section id="conseils" class="section-simple">
+<section id="conseils" class="section-simple onglet">
 <h2>Conseils pratiques</h2>
 <p>Nos conseils pour lire et profiter de la culture avec un budget étudiant arrivent bientôt !</p>
 </section>
@@ -478,14 +124,10 @@
 
 <nav class="menu" aria-label="Menu principal">
 <p class="menu-titre">MENU ♡</p>
-<a href="#accueil">Accueil</a>
+<a href="#accueil" class="selectionne">Accueil</a>
 <a href="#librairies">Nos librairies</a>
 <a href="#carte">Carte des librairies</a>
 <a href="#coups-de-coeur">Nos coups de cœur</a>
 <a href="#conseils">Conseils pratiques</a>
-</nav>
-</div>
-</body>
-</html>
 
 
