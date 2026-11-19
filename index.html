@@ -1,24 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ma Page Étudiante</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="page">
-<main>
-<section id="accueil" class="accueil onglet actif">
-<p class="petit-titre">Bienvenue sur</p>
-<h1>Ma Page Étudiante</h1>
-<h2>Plus de culture, moins de dépenses !</h2>
-<p>Découvrez des librairies parisiennes, des livres à petits prix et nos coups de cœur littéraires. La culture est aussi faite pour les petits budgets !</p>
-<a class="lien-principal" href="#coups-de-coeur">Découvrir nos coups de cœur</a>
-</section>
 
-  
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -26,142 +6,881 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Carte des librairies à Paris</title>
+    <title>Ma Page Étudiante</title>
 
-    <!-- Bibliothèque Leaflet -->
+    <!-- Carte Leaflet -->
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
     <style>
+
+        /* STYLE GENERAL */
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #faf7f2;
             margin: 0;
-            padding: 30px;
+            font-family: Georgia, serif;
+            background-color: #faf7f2;
+            color: #392c30;
         }
 
-        h2 {
+        h1, h2, h3 {
+            color: #653747;
+        }
+
+        p {
+            line-height: 1.7;
+        }
+
+        a {
+            color: #813f53;
+        }
+
+        /* MENU A DROITE */
+
+        .menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 230px;
+            height: 100vh;
+            background-color: #653747;
+            padding: 35px 18px;
+            z-index: 1000;
+            color: white;
+        }
+
+        .menu h2 {
+            color: white;
+            font-size: 22px;
             text-align: center;
-            color: #562c38;
-            margin-bottom: 10px;
+            margin-bottom: 45px;
         }
 
-        .introduction {
+        .menu button {
+            display: block;
+            width: 100%;
+            padding: 15px 10px;
+            margin-bottom: 12px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #987483;
+            color: white;
+            font-family: Georgia, serif;
+            font-size: 15px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .menu button:hover,
+        .menu button.actif {
+            background-color: #885568;
+            border-radius: 7px;
+        }
+
+        /* CONTENU PRINCIPAL */
+
+        main {
+            margin-right: 230px;
+            padding: 50px 7%;
+            min-height: 100vh;
+        }
+
+        .section {
+            display: none;
+            animation: apparition 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes apparition {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .titre-section {
+            font-size: 34px;
             text-align: center;
-            color: #666;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
 
-        /* Carte */
+        .sous-titre {
+            text-align: center;
+            color: #827177;
+            margin-bottom: 40px;
+        }
+
+        /* PAGE D'ACCUEIL */
+
+        .accueil {
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        .petit-titre {
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #987483;
+            font-size: 13px;
+        }
+
+        .accueil h1 {
+            font-size: 64px;
+            margin: 25px 0;
+            font-weight: normal;
+        }
+
+        .slogan {
+            font-size: 25px;
+            font-style: italic;
+            color: #813f53;
+        }
+
+        .ligne {
+            width: 90px;
+            height: 2px;
+            background-color: #b78d9b;
+            margin: 35px auto;
+        }
+
+        .presentation {
+            max-width: 600px;
+            margin: auto;
+            font-size: 17px;
+        }
+
+        .bouton {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 13px 25px;
+            background-color: #653747;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-family: Georgia, serif;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .bouton:hover {
+            background-color: #885568;
+        }
+
+        /* CARTES DES LIBRAIRIES */
+
+        .grille {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .carte-librairie {
+            background-color: white;
+            padding: 25px;
+            border: 1px solid #eadfe1;
+            border-radius: 14px;
+            box-shadow: 0 3px 12px #e8dfe0;
+        }
+
+        .carte-librairie h3 {
+            font-size: 21px;
+            margin-top: 0;
+        }
+
+        .carte-librairie p {
+            font-size: 14px;
+        }
+
+        .etiquette {
+            display: inline-block;
+            background-color: #f2e5e9;
+            color: #813f53;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .reduction {
+            background-color: #faf0e7;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        /* FILTRES */
+
+        .filtres {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .filtres button {
+            padding: 10px 15px;
+            margin: 5px;
+            background: white;
+            border: 1px solid #d8c3cb;
+            border-radius: 20px;
+            color: #653747;
+            cursor: pointer;
+        }
+
+        .filtres button:hover,
+        .filtres button.selectionne {
+            background-color: #653747;
+            color: white;
+        }
+
+        /* CARTE INTERACTIVE */
+
         #carte {
             width: 100%;
-            height: 520px;
+            height: 550px;
             border-radius: 15px;
             border: 1px solid #e5dcd6;
             z-index: 1;
         }
 
-        /* Petits points sur la carte */
         .point-librairie {
-            background-color: #813f53;
             width: 12px;
             height: 12px;
-            border-radius: 50%;
+            background-color: #813f53;
             border: 2px solid white;
+            border-radius: 50%;
             box-shadow: 0 1px 5px #777;
         }
 
-        /* Fenêtre d'information */
         .popup-librairie {
             font-family: Arial, sans-serif;
             width: 240px;
-            max-width: 100%;
             line-height: 1.5;
         }
 
         .popup-librairie h3 {
-            color: #562c38;
+            color: #653747;
             font-size: 17px;
-            margin: 0 0 8px;
         }
 
         .popup-librairie p {
             font-size: 12px;
-            margin: 7px 0;
+            margin: 8px 0;
         }
 
-        .popup-librairie strong {
-            color: #562c38;
-        }
-
-        .popup-librairie a {
-            color: #813f53;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .popup-librairie a:hover {
-            text-decoration: underline;
-        }
-
-        .categorie {
-            display: inline-block;
-            background-color: #f3e7e9;
-            color: #813f53;
-            padding: 4px 9px;
-            border-radius: 12px;
-            font-size: 11px;
-            margin-bottom: 8px;
-        }
-
-        .bon-plan {
-            background-color: #faf1e8;
+        .popup-librairie .bon-plan {
+            background-color: #faf0e7;
             padding: 8px;
             border-radius: 7px;
         }
 
-        @media (max-width: 600px) {
-            body {
+        /* COUPS DE COEUR */
+
+        .livre {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+            margin-bottom: 65px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #e7d9dc;
+        }
+
+        .couverture {
+            width: 180px;
+            min-width: 180px;
+            height: 265px;
+            background: linear-gradient(140deg, #653747, #b78d9b);
+            color: white;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 5px 7px 15px #d8c8ce;
+        }
+
+        .couverture h3 {
+            color: white;
+            font-size: 21px;
+        }
+
+        .couverture p {
+            color: #f5e6eb;
+            font-size: 13px;
+        }
+
+        .avis {
+            background-color: #f7e9ed;
+            padding: 25px;
+            border-radius: 25px;
+            position: relative;
+            flex: 1;
+        }
+
+        .avis::before {
+            content: "♥";
+            position: absolute;
+            top: -24px;
+            right: 25px;
+            color: #a85b73;
+            font-size: 42px;
+        }
+
+        .avis h3 {
+            margin-top: 0;
+        }
+
+        .avis p {
+            font-size: 14px;
+        }
+
+        /* CONSEILS */
+
+        .message-attente {
+            text-align: center;
+            background-color: white;
+            border-radius: 15px;
+            padding: 60px 25px;
+            margin-top: 50px;
+        }
+
+        /* PIED DE PAGE */
+
+        footer {
+            margin-top: 80px;
+            text-align: center;
+            color: #99868d;
+            font-size: 12px;
+        }
+
+        /* TELEPHONE */
+
+        @media (max-width: 800px) {
+
+            .menu {
+                position: relative;
+                width: 100%;
+                height: auto;
                 padding: 15px;
             }
 
+            .menu h2 {
+                margin: 5px 0 15px;
+            }
+
+            .menu button {
+                text-align: center;
+                margin-bottom: 4px;
+                padding: 10px;
+            }
+
+            main {
+                margin-right: 0;
+                padding: 25px 5%;
+            }
+
+            .accueil {
+                padding-top: 50px;
+            }
+
+            .accueil h1 {
+                font-size: 42px;
+            }
+
+            .grille {
+                grid-template-columns: 1fr;
+            }
+
+            .livre {
+                flex-direction: column;
+            }
+
+            .couverture {
+                width: 180px;
+            }
+
             #carte {
-                height: 430px;
+                height: 450px;
             }
         }
+
     </style>
 </head>
 
 <body>
 
-    <h2>Les librairies à Paris</h2>
+    <!-- MENU VERTICAL -->
 
-    <p class="introduction">
-        Découvrez nos librairies et leurs bons plans.
-        Cliquez sur un point pour en savoir plus !
-    </p>
+    <nav class="menu">
 
-    <!-- Emplacement de la carte -->
-    <div id="carte"></div>
+        <h2>Ma Page Étudiante ♡</h2>
 
-    <!-- JavaScript Leaflet -->
+        <button class="actif" onclick="ouvrirSection('accueil', this)">
+            Accueil
+        </button>
+
+        <button onclick="ouvrirSection('librairies', this)">
+            Nos librairies
+        </button>
+
+        <button onclick="ouvrirSection('map', this)">
+            Carte des librairies
+        </button>
+
+        <button onclick="ouvrirSection('coups', this)">
+            Nos coups de cœur
+        </button>
+
+        <button onclick="ouvrirSection('conseils', this)">
+            Conseils pratiques
+        </button>
+
+    </nav>
+
+
+    <main>
+
+        <!-- SECTION 1 : ACCUEIL -->
+
+        <section id="accueil" class="section active">
+
+            <div class="accueil">
+
+                <p class="petit-titre">Le guide culturel des étudiants</p>
+
+                <h1>Ma Page Étudiante</h1>
+
+                <p class="slogan">
+                    Plus de culture, moins de dépenses !
+                </p>
+
+                <div class="ligne"></div>
+
+                <p class="presentation">
+                    Bienvenue sur Ma Page Étudiante, votre petit guide
+                    pour découvrir la culture à Paris sans vous ruiner !
+                    <br><br>
+                    Retrouvez des librairies accessibles, des livres
+                    à petits prix, nos coups de cœur littéraires
+                    et des conseils pratiques pour profiter pleinement
+                    de la vie étudiante.
+                </p>
+
+                <button class="bouton"
+                        onclick="ouvrirSection('librairies')">
+                    Découvrir les librairies
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- SECTION 2 : NOS LIBRAIRIES -->
+
+        <section id="librairies" class="section">
+
+            <h2 class="titre-section">Nos librairies</h2>
+
+            <p class="sous-titre">
+                Nos bonnes adresses pour lire à petits prix à Paris.
+            </p>
+
+            <div class="filtres">
+
+                <button class="selectionne"
+                        onclick="filtrer('tous', this)">
+                    Toutes
+                </button>
+
+                <button onclick="filtrer('occasion', this)">
+                    Occasion
+                </button>
+
+                <button onclick="filtrer('solidaire', this)">
+                    Solidaires
+                </button>
+
+                <button onclick="filtrer('generaliste', this)">
+                    Généralistes
+                </button>
+
+            </div>
+
+            <div id="liste-librairies" class="grille"></div>
+
+        </section>
+
+
+        <!-- SECTION 3 : CARTE -->
+
+        <section id="map" class="section">
+
+            <h2 class="titre-section">Carte des librairies</h2>
+
+            <p class="sous-titre">
+                Cliquez sur les petits points pour découvrir
+                les spécialités et les bons plans de chaque librairie.
+            </p>
+
+            <div id="carte"></div>
+
+        </section>
+
+
+        <!-- SECTION 4 : COUPS DE COEUR -->
+
+        <section id="coups" class="section">
+
+            <h2 class="titre-section">Nos coups de cœur ♡</h2>
+
+            <p class="sous-titre">
+                Des lectures que nous avons envie de partager avec vous.
+            </p>
+
+
+            <!-- LIVRE 1 -->
+
+            <article class="livre">
+
+                <div class="couverture">
+                    <h3>Purgatoire des innocents</h3>
+                    <p>Karine Giebel</p>
+                </div>
+
+                <div class="avis">
+
+                    <h3>Purgatoire des innocents — Karine Giebel</h3>
+
+                    <p><strong>Mais quelle claque !</strong></p>
+
+                    <p>
+                        C'est typiquement le genre de roman qu'on commence
+                        pour quelques chapitres et qu'on finit par dévorer
+                        sans voir le temps passer.
+                    </p>
+
+                    <p>
+                        Karine Giebel nous embarque dans une histoire sombre,
+                        oppressante, qui ne laisse absolument aucun répit.
+                        On pense avoir compris, on espère, on doute,
+                        on tremble pour les personnages… et surtout,
+                        on ne sait jamais vraiment à quoi s'attendre.
+                    </p>
+
+                    <p>
+                        C'est un roman qui fait passer par tout un tas
+                        d'émotions. C'est dur, parfois dérangeant,
+                        mais impossible de rester indifférent face
+                        à cette histoire.
+                    </p>
+
+                    <p>
+                        Pas question d'en dévoiler davantage :
+                        c'est le genre de livre qu'il faut découvrir
+                        sans trop savoir où l'on met les pieds.
+                    </p>
+
+                    <p>
+                        Une chose est sûre : Karine Giebel
+                        ne fait pas dans la demi-mesure !
+                    </p>
+
+                    <p>
+                        Un thriller intense, éprouvant et absolument
+                        impossible à lâcher. À découvrir…
+                        si vous avez le cœur bien accroché !
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- LIVRE 2 -->
+
+            <article class="livre">
+
+                <div class="couverture">
+                    <h3>La Cuisine étudiante</h3>
+                    <p>Marmiton</p>
+                </div>
+
+                <div class="avis">
+
+                    <h3>La Cuisine étudiante — Marmiton</h3>
+
+                    <p>
+                        <strong>
+                            Être étudiant et bien manger sans exploser
+                            son budget, c'est possible !
+                        </strong>
+                    </p>
+
+                    <p>
+                        Avec ses 60 recettes faciles, équilibrées
+                        et économiques, ce livre donne plein d'idées
+                        pour varier les repas sans passer des heures
+                        en cuisine. Des recettes simples, des ingrédients
+                        accessibles et surtout pas besoin d'être
+                        un grand chef pour se lancer !
+                    </p>
+
+                    <p>
+                        De quoi changer un peu des éternelles pâtes
+                        et des repas improvisés à la dernière minute.
+                    </p>
+
+                    <p>
+                        Le petit livre parfait pour les étudiants
+                        qui veulent bien manger sans vider
+                        leur compte en banque !
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- LIVRE 3 -->
+
+            <article class="livre">
+
+                <div class="couverture">
+                    <h3>Le Mouvement</h3>
+                    <p>Douce Dibondo</p>
+                </div>
+
+                <div class="avis">
+
+                    <h3>Le Mouvement — Douce Dibondo</h3>
+
+                    <p>
+                        <strong>
+                            Et si la colère devenait le début
+                            de quelque chose ?
+                        </strong>
+                    </p>
+
+                    <p>
+                        Après la mort de sa sœur jumelle, Kem refuse
+                        de rester silencieuse. Avec ses amies,
+                        elle décide de chercher la vérité et de faire
+                        face à ceux qui pensent pouvoir agir
+                        en toute impunité.
+                    </p>
+
+                    <p>
+                        Un roman engagé, qui parle de sororité,
+                        de féminisme, de justice et de révolte.
+                        Une histoire qui bouscule, qui questionne
+                        et qui pousse à regarder certaines réalités
+                        en face.
+                    </p>
+
+                    <p>
+                        Une lecture forte, nécessaire et qui
+                        ne laisse pas indifférent !
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- LIVRE 4 -->
+
+            <article class="livre">
+
+                <div class="couverture">
+                    <h3>La Part absente</h3>
+                    <p>Rachida Brakni</p>
+                </div>
+
+                <div class="avis">
+
+                    <h3>La Part absente — Rachida Brakni</h3>
+
+                    <p>
+                        <strong>
+                            Jusqu'où peut-on aller pour être accepté
+                            par les autres ?
+                        </strong>
+                    </p>
+
+                    <p>
+                        Karina a tout pour mener une vie parfaite.
+                        Mais derrière cette apparence se cache un secret :
+                        elle a changé son prénom pour tenter d'effacer
+                        une partie de ses origines.
+                    </p>
+
+                    <p>
+                        À travers son histoire, Rachida Brakni aborde
+                        l'identité, les racines, le regard des autres
+                        et cette envie parfois douloureuse de trouver
+                        sa place dans la société.
+                    </p>
+
+                    <p>
+                        Un roman sensible et profondément humain,
+                        qui amène à réfléchir sur ce que l'on est,
+                        ce que l'on cache et ce que l'on transmet.
+                    </p>
+
+                    <p>
+                        Une belle lecture pour prendre le temps
+                        de réfléchir à notre rapport aux origines
+                        et à l'identité.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- LIVRE 5 -->
+
+            <article class="livre">
+
+                <div class="couverture">
+                    <h3>La Révolte de la reine</h3>
+                    <p>Morgane Moncomble</p>
+                </div>
+
+                <div class="avis">
+
+                    <h3>La Révolte de la reine — Morgane Moncomble</h3>
+
+                    <p>
+                        <strong>
+                            Une reine qui n'a pas vraiment l'intention
+                            de se laisser dicter sa conduite…
+                            voilà qui promet !
+                        </strong>
+                    </p>
+
+                    <p>
+                        Direction Versailles, en 1788.
+                        Acacia devient reine de France, mais compte bien
+                        faire les choses à sa manière.
+                        Entre un mariage loin d'être idyllique,
+                        les jeux de pouvoir à la cour et une Révolution
+                        qui approche, rien ne va se passer comme prévu.
+                    </p>
+
+                    <p>
+                        Morgane Moncomble nous propose une romance
+                        historique pleine de tension, de passion
+                        et de rebondissements, avec une héroïne
+                        qui refuse de rentrer dans le moule.
+                    </p>
+
+                    <p>
+                        De l'amour, des intrigues et une reine
+                        qui n'a pas sa langue dans sa poche :
+                        le mélange parfait pour se laisser embarquer !
+                    </p>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- SECTION 5 : CONSEILS -->
+
+        <section id="conseils" class="section">
+
+            <h2 class="titre-section">Conseils pratiques</h2>
+
+            <p class="sous-titre">
+                Nos astuces pour profiter de la culture
+                avec un budget étudiant.
+            </p>
+
+            <div class="message-attente">
+
+                <h3>Cette rubrique arrive bientôt ♡</h3>
+
+                <p>
+                    Nous préparons des conseils et des bons plans
+                    pour vous aider à découvrir Paris
+                    sans trop dépenser.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+            © 2026 Ma Page Étudiante —
+            Plus de culture, moins de dépenses !
+        </footer>
+
+    </main>
+
+
+    <!-- BIBLIOTHEQUE LEAFLET -->
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 
     <script>
 
-        // 1. Création de la carte centrée sur Paris
+        // ======================================
+        // 1. NAVIGATION ENTRE LES SECTIONS
+        // ======================================
 
-        var carte = L.map('carte').setView([48.8566, 2.3522], 12);
+        function ouvrirSection(id, bouton) {
 
-        // 2. Fond de carte OpenStreetMap
+            var sections = document.querySelectorAll('.section');
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors',
-            maxZoom: 19
-        }).addTo(carte);
+            sections.forEach(function(section) {
+                section.classList.remove('active');
+            });
+
+            document.getElementById(id).classList.add('active');
+
+            var boutons = document.querySelectorAll('.menu button');
+
+            boutons.forEach(function(element) {
+                element.classList.remove('actif');
+            });
+
+            if (bouton) {
+                bouton.classList.add('actif');
+            } else {
+                var correspondance = {
+                    accueil: 0,
+                    librairies: 1,
+                    map: 2,
+                    coups: 3,
+                    conseils: 4
+                };
+
+                boutons[correspondance[id]].classList.add('actif');
+            }
+
+            window.scrollTo(0, 0);
+
+            // Redimensionner la carte quand elle devient visible
+            if (id === 'map') {
+                setTimeout(function() {
+                    carte.invalidateSize();
+                }, 150);
+            }
+        }
 
 
-        // 3. Liste de nos 10 librairies
+        // ======================================
+        // 2. DONNEES DES 10 LIBRAIRIES
+        // ======================================
 
         var librairies = [
 
@@ -170,6 +889,7 @@
                 adresse: "155 Rue Saint-Honoré, 75001 Paris",
                 latitude: 48.8625,
                 longitude: 2.3355,
+                type: "generaliste",
                 categorie: "Librairie généraliste",
                 specialisation: "Littérature française, nouveautés, livres anciens et éditions rares.",
                 bonsPlans: "Réduction de 5 % via Club Butterfly (à confirmer).",
@@ -183,6 +903,7 @@
                 adresse: "7-11 Place de Clichy, 75017 Paris",
                 latitude: 48.8837,
                 longitude: 2.3276,
+                type: "generaliste",
                 categorie: "Librairie généraliste",
                 specialisation: "Littérature, sciences humaines, essais, jeunesse, BD et mangas.",
                 bonsPlans: "Réduction de 5 % via Club Butterfly (à confirmer).",
@@ -196,6 +917,7 @@
                 adresse: "25 Rue de Vaucouleurs, 75011 Paris",
                 latitude: 48.8685,
                 longitude: 2.3785,
+                type: "occasion",
                 categorie: "Livres d'occasion",
                 specialisation: "Romans, littérature contemporaine, classiques et livres d'occasion.",
                 bonsPlans: "3 € le livre ou 10 € les 4.",
@@ -209,6 +931,7 @@
                 adresse: "18 Boulevard Saint-Michel, 75006 Paris",
                 latitude: 48.8524,
                 longitude: 2.3435,
+                type: "occasion",
                 categorie: "Livres d'occasion",
                 specialisation: "Livres d'occasion, BD, mangas, CD, DVD et vinyles.",
                 bonsPlans: "Livres à partir de 0,20 €.",
@@ -222,6 +945,7 @@
                 adresse: "27 Rue du Château d'Eau, 75010 Paris",
                 latitude: 48.8719,
                 longitude: 2.3600,
+                type: "solidaire",
                 categorie: "Librairie solidaire",
                 specialisation: "Livres d'occasion issus de dons, littérature et ouvrages variés.",
                 bonsPlans: "Prix solidaires et livres parfois gratuits.",
@@ -235,6 +959,7 @@
                 adresse: "13 Rue Santeuil, 75005 Paris",
                 latitude: 48.8394,
                 longitude: 2.3533,
+                type: "solidaire",
                 categorie: "Boutique solidaire",
                 specialisation: "Livres d'occasion, vêtements et objets de seconde main.",
                 bonsPlans: "Promotions pour les étudiants et les moins de 30 ans (conditions à vérifier).",
@@ -248,6 +973,7 @@
                 adresse: "119 Boulevard Voltaire, 75011 Paris",
                 latitude: 48.8580,
                 longitude: 2.3800,
+                type: "occasion",
                 categorie: "Livres d'occasion",
                 specialisation: "Romans, classiques, livres en langues étrangères et ouvrages d'occasion.",
                 bonsPlans: "Livres à partir de 4 € ; tarifs dégressifs pour plusieurs livres (à vérifier).",
@@ -261,6 +987,7 @@
                 adresse: "9 Rue Saint-Martin, 75004 Paris",
                 latitude: 48.8585,
                 longitude: 2.3486,
+                type: "occasion",
                 categorie: "Livres et mangas d'occasion",
                 specialisation: "Mangas, BD, romans, livres en langues étrangères, CD et DVD.",
                 bonsPlans: "Livres et mangas à petits prix, promotions selon les arrivages.",
@@ -274,6 +1001,7 @@
                 adresse: "61 Rue Daguerre, 75014 Paris",
                 latitude: 48.8341,
                 longitude: 2.3265,
+                type: "solidaire",
                 categorie: "Librairie solidaire",
                 specialisation: "Littérature étrangère, sciences humaines, livres d'art, jeunesse, BD et vinyles.",
                 bonsPlans: "Livres d'occasion à prix solidaires.",
@@ -287,6 +1015,7 @@
                 adresse: "259 Rue des Pyrénées, 75020 Paris",
                 latitude: 48.8680,
                 longitude: 2.3985,
+                type: "occasion",
                 categorie: "Livres à prix réduits",
                 specialisation: "Livres neufs à prix réduits, livres d'occasion, ouvrages illustrés et littérature générale.",
                 bonsPlans: "Livres à prix réduits et déstockage.",
@@ -298,7 +1027,103 @@
         ];
 
 
-        // 4. Création de nos petits points
+        // ======================================
+        // 3. AFFICHER LES LIBRAIRIES
+        // ======================================
+
+        var liste = document.getElementById('liste-librairies');
+
+        function afficherLibrairies(type) {
+
+            liste.innerHTML = "";
+
+            librairies.forEach(function(librairie) {
+
+                if (type === 'tous' || librairie.type === type) {
+
+                    var article = document.createElement('article');
+
+                    article.className = 'carte-librairie';
+
+                    article.innerHTML = `
+                        <h3>${librairie.nom}</h3>
+
+                        <span class="etiquette">
+                            ${librairie.categorie}
+                        </span>
+
+                        <p>
+                            <strong>Adresse :</strong>
+                            ${librairie.adresse}
+                        </p>
+
+                        <p>
+                            <strong>Spécialisation :</strong>
+                            ${librairie.specialisation}
+                        </p>
+
+                        <p class="reduction">
+                            <strong>Bons plans :</strong>
+                            ${librairie.bonsPlans}
+                        </p>
+
+                        <p>
+                            <strong>Horaires :</strong>
+                            ${librairie.horaires}
+                        </p>
+
+                        <p>
+                            <strong>Téléphone :</strong>
+                            ${librairie.telephone}
+                        </p>
+
+                        <a href="${librairie.site}"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            Site officiel
+                        </a>
+                    `;
+
+                    liste.appendChild(article);
+                }
+
+            });
+        }
+
+        afficherLibrairies('tous');
+
+
+        // ======================================
+        // 4. FILTRER LES LIBRAIRIES
+        // ======================================
+
+        function filtrer(type, bouton) {
+
+            afficherLibrairies(type);
+
+            var boutons = document.querySelectorAll('.filtres button');
+
+            boutons.forEach(function(element) {
+                element.classList.remove('selectionne');
+            });
+
+            bouton.classList.add('selectionne');
+        }
+
+
+        // ======================================
+        // 5. CARTE INTERACTIVE LEAFLET
+        // ======================================
+
+        var carte = L.map('carte').setView([48.8566, 2.3522], 12);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(carte);
+
+
+        // Petits points bordeaux
 
         var iconeLibrairie = L.divIcon({
             className: '',
@@ -308,17 +1133,16 @@
         });
 
 
-        // 5. Ajouter chaque librairie sur la carte
+        // Ajouter les 10 points
 
         librairies.forEach(function(librairie) {
 
-            // Contenu de la fenêtre
             var contenu = `
                 <div class="popup-librairie">
 
                     <h3>${librairie.nom}</h3>
 
-                    <span class="categorie">
+                    <span class="etiquette">
                         ${librairie.categorie}
                     </span>
 
@@ -358,7 +1182,6 @@
                 </div>
             `;
 
-            // Créer le point
             L.marker(
                 [librairie.latitude, librairie.longitude],
                 {icon: iconeLibrairie}
@@ -375,118 +1198,3 @@
 
 </body>
 </html>
-
-
-
-<section id="librairies" class="section-simple onglet">
-<h2>Nos librairies</h2>
-<p>Découvrez nos dix adresses et leurs bons plans. Cliquez sur « Carte » pour les situer dans Paris.</p>
-<div id="liste-librairies" class="liste-librairies"></div>
-</section>
-
-
-<section id="carte" class="section-simple onglet">
-<h2>La carte des librairies</h2>
-<p>Cliquez sur un petit point pour découvrir la spécialisation, les prix et les horaires de chaque librairie.</p>
-<div id="carte-librairies" aria-label="Carte interactive des librairies parisiennes"></div>
-<p class="note">Les coordonnées sont indicatives. Horaires et offres à vérifier avant publication.</p>
-</section>
-
-
-<section id="coups-de-coeur" class="coups-de-coeur onglet">
-<h2>♡ Nos coups de cœur</h2>
-<p class="sous-titre">Cinq lectures que nous avons envie de partager avec vous.</p>
-
-
-<article class="livre">
-<div class="couverture"><img src="images/purgatoire-des-innocents.jpg" alt="Couverture du livre Purgatoire des innocents de Karine Giebel" onerror="this.style.display='none'; this.parentElement.classList.add('sans-image')"><span class="remplacement">Purgatoire des innocents<br><small>Karine Giebel</small></span></div>
-<div class="avis">
-<h3>Purgatoire des innocents</h3><p class="auteur">Karine Giebel</p>
-<div class="texte-avis">
-<p><strong>Mais quelle claque !</strong></p>
-<p>C'est typiquement le genre de roman qu'on commence pour quelques chapitres et qu'on finit par dévorer sans voir le temps passer.</p>
-<p>Karine Giebel nous embarque dans une histoire sombre, oppressante, qui ne laisse absolument aucun répit. On pense avoir compris, on espère, on doute, on tremble pour les personnages… et surtout, on ne sait jamais vraiment à quoi s'attendre.</p>
-<p>C'est un roman qui fait passer par tout un tas d'émotions. C'est dur, parfois dérangeant, mais impossible de rester indifférent face à cette histoire.</p>
-<p>Pas question d'en dévoiler davantage : c'est le genre de livre qu'il faut découvrir sans trop savoir où l'on met les pieds.</p>
-<p>Une chose est sûre : Karine Giebel ne fait pas dans la demi-mesure !</p>
-<p>Un thriller intense, éprouvant et absolument impossible à lâcher. À découvrir… si vous avez le cœur bien accroché !</p>
-</div>
-</div>
-</article>
-
-
-<article class="livre">
-<div class="couverture"><img src="images/la-cuisine-etudiante.jpg" alt="Couverture de La Cuisine étudiante de Marmiton" onerror="this.style.display='none'; this.parentElement.classList.add('sans-image')"><span class="remplacement">La Cuisine étudiante<br><small>Marmiton</small></span></div>
-<div class="avis">
-<h3>La Cuisine étudiante</h3><p class="auteur">Marmiton</p>
-<div class="texte-avis">
-<p>Être étudiant et bien manger sans exploser son budget, c'est possible !</p>
-<p>Avec ses 60 recettes faciles, équilibrées et économiques, ce livre donne plein d'idées pour varier les repas sans passer des heures en cuisine. Des recettes simples, des ingrédients accessibles et surtout pas besoin d'être un grand chef pour se lancer !</p>
-<p>De quoi changer un peu des éternelles pâtes et des repas improvisés à la dernière minute.</p>
-<p>Le petit livre parfait pour les étudiants qui veulent bien manger sans vider leur compte en banque !</p>
-</div>
-</div>
-</article>
-
-
-<article class="livre">
-<div class="couverture"><img src="images/le-mouvement.jpg" alt="Couverture du livre Le Mouvement de Douce Dibondo" onerror="this.style.display='none'; this.parentElement.classList.add('sans-image')"><span class="remplacement">Le Mouvement<br><small>Douce Dibondo</small></span></div>
-<div class="avis">
-<h3>Le Mouvement</h3><p class="auteur">Douce Dibondo</p>
-<div class="texte-avis">
-<p>Et si la colère devenait le début de quelque chose ?</p>
-<p>Après la mort de sa sœur jumelle, Kem refuse de rester silencieuse. Avec ses amies, elle décide de chercher la vérité et de faire face à ceux qui pensent pouvoir agir en toute impunité.</p>
-<p>Un roman engagé, qui parle de sororité, de féminisme, de justice et de révolte. Une histoire qui bouscule, qui questionne et qui pousse à regarder certaines réalités en face.</p>
-<p>Une lecture forte, nécessaire et qui ne laisse pas indifférent !</p>
-</div>
-</div>
-</article>
-
-
-<article class="livre">
-<div class="couverture"><img src="images/la-part-absente.jpg" alt="Couverture du livre La Part absente de Rachida Brakni" onerror="this.style.display='none'; this.parentElement.classList.add('sans-image')"><span class="remplacement">La Part absente<br><small>Rachida Brakni</small></span></div>
-<div class="avis">
-<h3>La Part absente</h3><p class="auteur">Rachida Brakni</p>
-<div class="texte-avis">
-<p>Jusqu'où peut-on aller pour être accepté par les autres ?</p>
-<p>Karina a tout pour mener une vie parfaite. Mais derrière cette apparence se cache un secret : elle a changé son prénom pour tenter d'effacer une partie de ses origines.</p>
-<p>À travers son histoire, Rachida Brakni aborde l'identité, les racines, le regard des autres et cette envie parfois douloureuse de trouver sa place dans la société.</p>
-<p>Un roman sensible et profondément humain, qui amène à réfléchir sur ce que l'on est, ce que l'on cache et ce que l'on transmet.</p>
-<p>Une belle lecture pour prendre le temps de réfléchir à notre rapport aux origines et à l'identité.</p>
-</div>
-</div>
-</article>
-
-
-<article class="livre">
-<div class="couverture"><img src="images/la-revolte-de-la-reine.jpg" alt="Couverture du livre La Révolte de la reine de Morgane Moncomble" onerror="this.style.display='none'; this.parentElement.classList.add('sans-image')"><span class="remplacement">La Révolte de la reine<br><small>Morgane Moncomble</small></span></div>
-<div class="avis">
-<h3>La Révolte de la reine</h3><p class="auteur">Morgane Moncomble</p>
-<div class="texte-avis">
-<p>Une reine qui n'a pas vraiment l'intention de se laisser dicter sa conduite… voilà qui promet !</p>
-<p>Direction Versailles, en 1788. Acacia devient reine de France, mais compte bien faire les choses à sa manière. Entre un mariage loin d'être idyllique, les jeux de pouvoir à la cour et une Révolution qui approche, rien ne va se passer comme prévu.</p>
-<p>Morgane Moncomble nous propose une romance historique pleine de tension, de passion et de rebondissements, avec une héroïne qui refuse de rentrer dans le moule.</p>
-<p>De l'amour, des intrigues et une reine qui n'a pas sa langue dans sa poche : le mélange parfait pour se laisser embarquer !</p>
-</div>
-</div>
-</article>
-</section>
-
-
-<section id="conseils" class="section-simple onglet">
-<h2>Conseils pratiques</h2>
-<p>Nos conseils pour lire et profiter de la culture avec un budget étudiant arrivent bientôt !</p>
-</section>
-<footer>Ma Page Étudiante · Plus de culture, moins de dépenses !</footer>
-</main>
-
-
-<nav class="menu" aria-label="Menu principal">
-<p class="menu-titre">MENU ♡</p>
-<a href="#accueil" class="selectionne">Accueil</a>
-<a href="#librairies">Nos librairies</a>
-<a href="#carte">Carte des librairies</a>
-<a href="#coups-de-coeur">Nos coups de cœur</a>
-<a href="#conseils">Conseils pratiques</a>
-
-
